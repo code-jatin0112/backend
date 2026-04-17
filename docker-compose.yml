@@ -1,28 +1,20 @@
-version: "3.9"
-
 services:
   mongo:
     image: mongo
-    container_name: mongo
-    ports:
-      - "27017:27017"
     volumes:
       - mongo_data:/data/db
 
   server:
     build: ./server
-    container_name: backend
     ports:
       - "5002:5000"
-    environment:
-      - MONGODB_URI=${MONGODB_URI}
-      - JWT_SECRET=${JWT_SECRET}
+    env_file:
+      - ./server/.env   # ✅ important
     depends_on:
       - mongo
 
   client:
     build: ./client
-    container_name: frontend
     ports:
       - "3000:80"
     depends_on:
